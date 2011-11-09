@@ -23,6 +23,9 @@ def _get_time_from_seconds(time_seconds):
     seconds = int(time_seconds)
     return datetime.time(hours, minutes, seconds)
 
+def _compute_pace_per_kilometer(hundred_pace_seconds):
+    return hundred_pace_seconds * 10.0
+
 def _compute_marathon_pace(hundred_pace_seconds):
     return hundred_pace_seconds * HUNDRED_TO_MARATHON
 
@@ -40,16 +43,20 @@ def paces():
     time = datetime.datetime.strptime(request.args["time"], "%H:%M:%S")
     time_seconds = (time.hour * 3600.0) + (time.minute * 60.0) + time.second
     hundred_pace_seconds = time_seconds / HUNDRED_METER_CONVERSION
+    kilometer_pace_seconds = _compute_pace_per_kilometer(hundred_pace_seconds)
     marathon_pace_seconds = _compute_marathon_pace(hundred_pace_seconds)
-   
+    ten_percent_pace = kilometer_pace_seconds * 1.1 * 1.609
+    
     # NOTE - Do we care about rounding or microsecods?
     hundred_pace = _get_time_from_seconds(hundred_pace_seconds)
     marathon_pace = _get_time_from_seconds(marathon_pace_seconds)
+    ten_percent_pace = _get_time_from_seconds(ten_percent_pace)
 
     response = {
         "time": request.args["time"],
         "hundred_pace": hundred_pace.strftime("%M:%S"),
         "marathon_pace": marathon_pace.strftime("%M:%S"),
+        "ten_percent": ten_percent_pace.strftime("%M:%S"),
     }
     return json.dumps(response)
 

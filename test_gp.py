@@ -54,6 +54,17 @@ class TestGoalPace(unittest.TestCase):
         """It should correctly compute marathon pace from hundred pace."""
         pace = gp._compute_marathon_pace(27.0)
         self.assertEqual(434.43, pace)
- 
-#if __name__ == "__main__":
-#        unittest.main()
+
+    def test_compute_marathon_pace_per_k(self):
+        """It should compute marathon pace in seconds per kilometer."""
+        seconds_per_kilometer = gp._compute_pace_per_kilometer(30.0)
+        self.assertEqual(300, seconds_per_kilometer)
+
+    def test_response_with_ten_percent_slower(self):
+        """It should compute a training pace that is 10% slower than marathon pace."""
+        response = self.app.get("/api/v1/paces?time=2:52:37")
+        self.assertTrue(200, response.status_code)
+        response = json.loads(response.data)
+        self.assertTrue("ten_percent" in response)
+        ten_percent = response["ten_percent"]
+        self.assertEqual("07:14", ten_percent)
