@@ -60,7 +60,7 @@ class TestGoalPace(unittest.TestCase):
         seconds_per_kilometer = gp._compute_pace_per_kilometer(30.0)
         self.assertEqual(300, seconds_per_kilometer)
 
-    def test_response_with_ten_percent_slower(self):
+    def test_response_with_ten_and_twenty_percent_slower(self):
         """It should compute a training pace that is 10% slower than marathon pace."""
         response = self.app.get("/api/v1/paces?time=2:52:37")
         self.assertTrue(200, response.status_code)
@@ -68,3 +68,7 @@ class TestGoalPace(unittest.TestCase):
         self.assertTrue("ten_percent" in response)
         ten_percent = response["ten_percent"]
         self.assertEqual("07:14", ten_percent)
+        self.assertTrue("twenty_percent" in response)
+        twenty_percent = response["twenty_percent"]
+        self.assertEqual("07:53", twenty_percent)
+

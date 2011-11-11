@@ -46,17 +46,20 @@ def paces():
     kilometer_pace_seconds = _compute_pace_per_kilometer(hundred_pace_seconds)
     marathon_pace_seconds = _compute_marathon_pace(hundred_pace_seconds)
     ten_percent_pace = kilometer_pace_seconds * 1.1 * 1.609
+    twenty_percent_pace = kilometer_pace_seconds * 1.2 * 1.609
     
     # NOTE - Do we care about rounding or microsecods?
     hundred_pace = _get_time_from_seconds(hundred_pace_seconds)
     marathon_pace = _get_time_from_seconds(marathon_pace_seconds)
     ten_percent_pace = _get_time_from_seconds(ten_percent_pace)
+    twenty_percent_pace = _get_time_from_seconds(twenty_percent_pace)
 
     response = {
         "time": request.args["time"],
         "hundred_pace": hundred_pace.strftime("%M:%S"),
         "marathon_pace": marathon_pace.strftime("%M:%S"),
         "ten_percent": ten_percent_pace.strftime("%M:%S"),
+        "twenty_percent": twenty_percent_pace.strftime("%M:%S"),
     }
     return json.dumps(response)
 
