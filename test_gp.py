@@ -43,32 +43,64 @@ class TestGoalPace(unittest.TestCase):
         hundred_pace = pace_seconds / gp.HUNDRED_METER_CONVERSION
         self.assertAlmostEqual(25.5954496978315, hundred_pace)
 
-    def test_response_with_marathon_pace(self):
-        """It should compute and respond with marathon pace."""
-        response = self.app.get("/api/v1/paces?time=2:52:37")
-        response = json.loads(response.data)
-        self.assertTrue("marathon_pace" in response, "Pace should be in response.")
-        self.assertEqual("06:34", response["marathon_pace"])
+    def test_compute_marathon_pace_per_k(self):
+        """It should compute marathon pace in seconds per kilometer."""
+        seconds_per_kilometer = gp._compute_pace_per_kilometer(30.0)
+        self.assertEqual(300, seconds_per_kilometer)
 
     def test_compute_marathon_pace(self):
         """It should correctly compute marathon pace from hundred pace."""
         pace = gp._compute_marathon_pace(27.0)
         self.assertEqual(434.43, pace)
 
-    def test_compute_marathon_pace_per_k(self):
-        """It should compute marathon pace in seconds per kilometer."""
-        seconds_per_kilometer = gp._compute_pace_per_kilometer(30.0)
-        self.assertEqual(300, seconds_per_kilometer)
+    def test_response_with_marathon_pace(self):
+        """It should compute and respond with marathon pace."""
+        response = self.app.get("/api/v1/paces?time=2:52:37")
+        response = json.loads(response.data)
+
+        self.assertTrue("mile_paces" in response)
+        mile_paces = response["mile_paces"]
+        self.assertTrue("marathon_pace" in mile_paces, "Pace should be in response.")
+        self.assertEqual("06:34", mile_paces["marathon_pace"])
+
+        self.assertTrue("kilometer_paces" in response)
+        kilometer_paces = response["kilometer_paces"]
+        self.assertTrue("marathon_pace" in kilometer_paces, "Pace should be in response.")
+        self.assertEqual("04:05", kilometer_paces["marathon_pace"])
+
 
     def test_response_with_ten_and_twenty_percent_slower(self):
         """It should compute a training pace that is 10% slower than marathon pace."""
         response = self.app.get("/api/v1/paces?time=2:52:37")
         self.assertTrue(200, response.status_code)
         response = json.loads(response.data)
-        self.assertTrue("ten_percent" in response)
-        ten_percent = response["ten_percent"]
+
+        mile_paces = response["mile_paces"]
+
+        self.assertTrue("ten_percent" in mile_paces)
+        ten_percent = mile_paces["ten_percent"]
         self.assertEqual("07:14", ten_percent)
-        self.assertTrue("twenty_percent" in response)
-        twenty_percent = response["twenty_percent"]
+
+        self.assertTrue("twenty_percent" in mile_paces)
+        twenty_percent = mile_paces["twenty_percent"]
         self.assertEqual("07:53", twenty_percent)
 
+        kilometer_paces = response["kilometer_paces"]
+
+        self.assertTrue("ten_percent" in kilometer_paces)
+        ten_percent = kilometer_paces["ten_percent"]
+        self.assertEqual("04:30", ten_percent)
+
+        self.assertTrue("twenty_percent" in kilometer_paces)
+        twenty_percent = kilometer_paces["twenty_percent"]
+        self.assertEqual("04:54", twenty_percent)
+
+    def test_fail(self):
+        """Forcing fail to see output."""
+        response = self.app.get("/api/v1/paces?time=2:52:37")
+        self.assertTrue(200, response.status_code)
+        response = json.loads(response.data)
+        import logging as logger
+        import pprint
+        logger.debug("\nJSON output:\n%s", pprint.PrettyPrinter().pformat(response))
+        self.assertTrue(False)
