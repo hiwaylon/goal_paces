@@ -43,16 +43,6 @@ class TestGoalPace(unittest.TestCase):
         hundred_pace = pace_seconds / gp.HUNDRED_METER_CONVERSION
         self.assertAlmostEqual(25.5954496978315, hundred_pace)
 
-    def test_compute_marathon_pace_per_k(self):
-        """It should compute marathon pace in seconds per kilometer."""
-        seconds_per_kilometer = gp._compute_pace_per_kilometer(30.0)
-        self.assertEqual(300, seconds_per_kilometer)
-
-    def test_compute_marathon_pace(self):
-        """It should correctly compute marathon pace from hundred pace."""
-        pace = gp._compute_marathon_pace(27.0)
-        self.assertEqual(434.43, pace)
-
     def test_response_with_marathon_pace(self):
         """It should compute and respond with marathon pace."""
         response = self.app.get("/api/v1/paces?time=2:52:37")
@@ -120,3 +110,8 @@ class TestGoalPace(unittest.TestCase):
         self.assertEqual("06:30", special_ks["5k"])
         self.assertEqual("06:44", special_ks["20k"])
         self.assertEqual("07:28", special_ks["45k"])
+
+    def test_error(self):
+        """It should 400."""
+        response = self.app.get("/api/v1/paces?glorb=slert")
+        self.assertEqual(400, response.status_code)
