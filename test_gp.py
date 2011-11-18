@@ -73,34 +73,50 @@ class TestGoalPace(unittest.TestCase):
         """It should compute a training pace that is 10% slower than marathon pace."""
         response = self.app.get("/api/v1/paces?time=2:52:37")
         self.assertTrue(200, response.status_code)
+
         response = json.loads(response.data)
-
-        mile_paces = response["mile_paces"]
-
-        self.assertTrue("ten_percent" in mile_paces)
-        ten_percent = mile_paces["ten_percent"]
+        self.assertTrue("fundamental" in response["mile_paces"])
+        fundamentals = response["mile_paces"]["fundamental"]
+        self.assertTrue("ten_percent" in fundamentals)
+        ten_percent = fundamentals["ten_percent"]
         self.assertEqual("07:14", ten_percent)
 
-        self.assertTrue("twenty_percent" in mile_paces)
-        twenty_percent = mile_paces["twenty_percent"]
+        self.assertTrue("twenty_percent" in fundamentals)
+        twenty_percent = fundamentals["twenty_percent"]
         self.assertEqual("07:53", twenty_percent)
 
-        kilometer_paces = response["kilometer_paces"]
-
-        self.assertTrue("ten_percent" in kilometer_paces)
-        ten_percent = kilometer_paces["ten_percent"]
+        self.assertTrue("fundamental" in response["kilometer_paces"])
+        fundamentals = response["kilometer_paces"]["fundamental"]
+        self.assertTrue("ten_percent" in fundamentals)
+        ten_percent = fundamentals["ten_percent"]
         self.assertEqual("04:30", ten_percent)
 
-        self.assertTrue("twenty_percent" in kilometer_paces)
-        twenty_percent = kilometer_paces["twenty_percent"]
+        self.assertTrue("twenty_percent" in fundamentals)
+        twenty_percent = fundamentals["twenty_percent"]
         self.assertEqual("04:54", twenty_percent)
+        
+    def test_special_training_paces(self):
+        """It should compute special training paces correctly."""
+        response = self.app.get("/api/v1/paces?time=2:54:59")
+        self.assertEqual(200, response.status_code)
 
-    def test_fail(self):
-        """Forcing fail to see output."""
-        response = self.app.get("/api/v1/paces?time=2:52:37")
-        self.assertTrue(200, response.status_code)
+        # km
         response = json.loads(response.data)
-        import logging as logger
-        import pprint
-        logger.debug("\nJSON output:\n%s", pprint.PrettyPrinter().pformat(response))
-        self.assertTrue(False)
+        self.assertTrue("special" in response["kilometer_paces"])
+        special_ks = response["kilometer_paces"]["special"]
+        self.assertEqual("03:49", special_ks["1k"])
+        self.assertEqual("03:56", special_ks["2k"])
+        self.assertEqual("04:00", special_ks["3k"])
+        self.assertEqual("04:02", special_ks["5k"])
+        self.assertEqual("04:11", special_ks["20k"])
+        self.assertEqual("04:38", special_ks["45k"])
+
+        # mi
+        self.assertTrue("special" in response["mile_paces"])
+        special_ks = response["mile_paces"]["special"]
+        self.assertEqual("06:09", special_ks["1k"])
+        self.assertEqual("06:20", special_ks["2k"])
+        self.assertEqual("06:26", special_ks["3k"])
+        self.assertEqual("06:30", special_ks["5k"])
+        self.assertEqual("06:44", special_ks["20k"])
+        self.assertEqual("07:28", special_ks["45k"])

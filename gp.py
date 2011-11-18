@@ -34,6 +34,13 @@ def _compute_marathon_pace(hundred_pace_seconds):
     return hundred_pace_seconds * HUNDRED_TO_MARATHON
 
 
+def _make_pace_time(multiplier, pace):
+    seconds = multiplier * pace
+    time = _get_time_from_seconds(seconds)
+    return time.strftime("%M:%S")
+
+
+
 @app.route("/")
 def hello_world():
     return "Hi. Try /api/v1/paces?time=6:28"
@@ -66,14 +73,24 @@ def paces():
     kilometer_paces = {}
     kilometer_paces["marathon_pace"] = marathon_pace.strftime("%M:%S")
 
-    ten_percent_km_pace = kilometer_pace_seconds * 1.1
-    ten_percent_km = _get_time_from_seconds(ten_percent_km_pace)
-    kilometer_paces["ten_percent"] = ten_percent_km.strftime("%M:%S")
+    # Compute fundamental paces.
+    fundamental = {}
+    fundamental["ten_percent"] = _make_pace_time(
+        1.1, kilometer_pace_seconds)
+    fundamental["twenty_percent"] = _make_pace_time(
+        1.2, kilometer_pace_seconds)
+    kilometer_paces["fundamental"] = fundamental
 
-    twenty_percent_km_pace = kilometer_pace_seconds * 1.2
-    twenty_percent_km = _get_time_from_seconds(twenty_percent_km_pace)
-    kilometer_paces["twenty_percent"] = twenty_percent_km.strftime("%M:%S")
-
+    # Compute special paces.
+    special = {}
+    special["1k"] = _make_pace_time(0.922, kilometer_pace_seconds)
+    special["2k"] = _make_pace_time(0.95, kilometer_pace_seconds)
+    special["3k"] = _make_pace_time(0.965, kilometer_pace_seconds)
+    special["5k"] = _make_pace_time(0.975, kilometer_pace_seconds)
+    special["20k"] = _make_pace_time(1.01, kilometer_pace_seconds)
+    special["45k"] = _make_pace_time(1.12, kilometer_pace_seconds)
+    kilometer_paces["special"] = special
+        
     response["kilometer_paces"] = kilometer_paces
 
     # Minutes per mile.
@@ -81,15 +98,25 @@ def paces():
     marathon_pace = _get_time_from_seconds(marathon_pace)
     mile_paces = {}
     mile_paces["marathon_pace"] = marathon_pace.strftime("%M:%S")
+    
+    # Compute fundamental paces.
+    fundamental = {}
+    fundamental["ten_percent"] = _make_pace_time(
+        1.1 * 1.609, kilometer_pace_seconds)
+    fundamental["twenty_percent"] = _make_pace_time(
+        1.2 * 1.609, kilometer_pace_seconds)
+    mile_paces["fundamental"] = fundamental
 
-    ten_percent_mi_pace = ten_percent_km_pace * 1.609
-    ten_percent_mi = _get_time_from_seconds(ten_percent_mi_pace)
-    mile_paces["ten_percent"] = ten_percent_mi.strftime("%M:%S")
-
-    twenty_percent_km_pace = twenty_percent_km_pace * 1.609
-    twenty_percent_km = _get_time_from_seconds(twenty_percent_km_pace)
-    mile_paces["twenty_percent"] = twenty_percent_km.strftime("%M:%S")
-
+    # Compute special paces.
+    special = {}
+    special["1k"] = _make_pace_time(0.922 * 1.609, kilometer_pace_seconds)
+    special["2k"] = _make_pace_time(0.95 * 1.609, kilometer_pace_seconds)
+    special["3k"] = _make_pace_time(0.965 * 1.609, kilometer_pace_seconds)
+    special["5k"] = _make_pace_time(0.975 * 1.609, kilometer_pace_seconds)
+    special["20k"] = _make_pace_time(1.01 * 1.609, kilometer_pace_seconds)
+    special["45k"] = _make_pace_time(1.12 * 1.609, kilometer_pace_seconds)
+    mile_paces["special"] = special
+    
     response["mile_paces"] = mile_paces
 
     return json.dumps(response)
