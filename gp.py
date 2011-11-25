@@ -6,6 +6,7 @@ Compute marathon goal paces.
 
 import datetime
 import json
+import os
 
 import flask
 from flask import Flask, request, render_template
@@ -110,5 +111,5 @@ def paces():
     return json.dumps(response)
 
 if __name__ == "__main__":
-    # TODO - configuration variable for debug
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
