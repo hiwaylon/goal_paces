@@ -1,0 +1,82 @@
+<!doctype html>
+    <head>
+        <title>Goal Paces</title>
+        <link rel="stylesheet" href="static/gp.css">
+        <link rel="stylesheet" href="static/970_12_10.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#compute_button").click(function() {
+                    $.getJSON("/api/v1/paces?time=" + $("#time").val(), function(data) {
+                        $("#hundred_pace").html(data.hundred_pace)
+                        // miles
+                        $("#marathon_pace_mile").html(data.mile_paces.marathon_pace)
+                        $("#ten_percent_mile").html(data.mile_paces.fundamental.ten_percent)
+                        $("#twenty_percent_mile").html(data.mile_paces.fundamental.twenty_percent)
+                        $("#1k_mile").html(data.mile_paces.special.one_k)
+                        $("#2k_mile").html(data.mile_paces.special.two_k)
+                        $("#3k_mile").html(data.mile_paces.special.three_k)
+                        $("#5k_mile").html(data.mile_paces.special.five_k)
+                        $("#20k_mile").html(data.mile_paces.special.twenty_k)
+                        $("#45k_mile").html(data.mile_paces.special.forty_five_k)
+                        // kilometers
+                        $("#marathon_pace_km").html(data.kilometer_paces.marathon_pace)
+                        $("#ten_percent_km").html(data.kilometer_paces.fundamental.ten_percent)
+                        $("#twenty_percent_km").html(data.kilometer_paces.fundamental.twenty_percent)
+                        $("#1k_km").html(data.kilometer_paces.special.one_k)
+                        $("#2k_km").html(data.kilometer_paces.special.two_k)
+                        $("#3k_km").html(data.kilometer_paces.special.three_k)
+                        $("#5k_km").html(data.kilometer_paces.special.five_k)
+                        $("#20k_km").html(data.kilometer_paces.special.twenty_k)
+                        $("#45k_km").html(data.kilometer_paces.special.forty_five_k)
+                    })
+                    $("#results").show("fast")
+                    // $("#results").slideDown("slow")
+                })
+            });
+        </script>
+    </head>
+    <body class="main">
+        <div id="title" class="g960">
+            <h1>Marathon Pace Calculator</h1>
+        </div>
+        <div id="input" class="g960">
+            <input type="textbox" value="2:54:59" id="time">
+            <input type="button" value="Compute Goal Paces" id="compute_button">
+        </div>
+        <div id="results" class="g960" style="display: none">
+            <div class="g960">
+                <h2>Marathon Paces</h2>
+                <p>mile pace: <span id="marathon_pace_mile"></span></p>
+                <p>kilometer pace: <span id="marathon_pace_km"></span></p>
+                <p>hundred pace: <span id="hundred_pace"></span></p>
+            </div>
+            <div id="mile_paces" class="g400">
+                <h2>Mile Paces</h2>
+                <h3>Fundamental Paces</h2>
+                <p>ten percent: <span id="ten_percent_mile"></span></p>
+                <p>twenty percent: <span id="twenty_percent_mile"></span></p>
+                <h3>Special Paces</h2>
+                <p>1k: <span id="1k_mile"></span></p>
+                <p>2k: <span id="2k_mile"></span></p>
+                <p>3k: <span id="3k_mile"></span></p>
+                <p>5k: <span id="5k_mile"></span></p>
+                <p>20k: <span id="20k_mile"></span></p>
+                <p>45k: <span id="45k_mile"></span></p>
+            </div>
+            <div id="kilometer_paces" class="g400">
+                <h2>Kilometer Paces</h2>
+                <h3>Fundamental Paces</h2>
+                <p>ten percent: <span id="ten_percent_km"></span></p>
+                <p>twenty percent: <span id="twenty_percent_km"></span></p>
+                <h3>Special Paces</h2>
+                <p>1k: <span id="1k_km"></span></p>
+                <p>2k: <span id="2k_km"></span></p>
+                <p>3k: <span id="3k_km"></span></p>
+                <p>5k: <span id="5k_km"></span></p>
+                <p>20k: <span id="20k_km"></span></p>
+                <p>45k: <span id="45k_km"></span></p>
+            </div>
+        </div>
+    </body>
+</html>

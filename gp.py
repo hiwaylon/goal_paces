@@ -8,7 +8,7 @@ import datetime
 import json
 
 import flask
-from flask import Flask, request
+from flask import Flask, request, render_template
 app = Flask(__name__)
 
 HUNDRED_METER_CONVERSION = 42195.0 / 100.0
@@ -28,6 +28,11 @@ def _make_pace_time(multiplier, pace):
     seconds = multiplier * pace
     time = _get_time_from_seconds(seconds)
     return time.strftime("%M:%S")
+
+
+@app.route("/")
+def home():
+    return render_template("home.html")
 
 
 @app.route("/api/v1/paces")
@@ -66,12 +71,12 @@ def paces():
 
     # Compute special paces.
     special = {}
-    special["1k"] = _make_pace_time(0.922, kilometer_pace_seconds)
-    special["2k"] = _make_pace_time(0.95, kilometer_pace_seconds)
-    special["3k"] = _make_pace_time(0.965, kilometer_pace_seconds)
-    special["5k"] = _make_pace_time(0.975, kilometer_pace_seconds)
-    special["20k"] = _make_pace_time(1.01, kilometer_pace_seconds)
-    special["45k"] = _make_pace_time(1.12, kilometer_pace_seconds)
+    special["one_k"] = _make_pace_time(0.922, kilometer_pace_seconds)
+    special["two_k"] = _make_pace_time(0.95, kilometer_pace_seconds)
+    special["three_k"] = _make_pace_time(0.965, kilometer_pace_seconds)
+    special["five_k"] = _make_pace_time(0.975, kilometer_pace_seconds)
+    special["twenty_k"] = _make_pace_time(1.01, kilometer_pace_seconds)
+    special["forty_five_k"] = _make_pace_time(1.12, kilometer_pace_seconds)
     kilometer_paces["special"] = special
         
     response["kilometer_paces"] = kilometer_paces
@@ -92,18 +97,18 @@ def paces():
 
     # Compute special paces.
     special = {}
-    special["1k"] = _make_pace_time(0.922 * 1.609, kilometer_pace_seconds)
-    special["2k"] = _make_pace_time(0.95 * 1.609, kilometer_pace_seconds)
-    special["3k"] = _make_pace_time(0.965 * 1.609, kilometer_pace_seconds)
-    special["5k"] = _make_pace_time(0.975 * 1.609, kilometer_pace_seconds)
-    special["20k"] = _make_pace_time(1.01 * 1.609, kilometer_pace_seconds)
-    special["45k"] = _make_pace_time(1.12 * 1.609, kilometer_pace_seconds)
+    special["one_k"] = _make_pace_time(0.922 * 1.609, kilometer_pace_seconds)
+    special["two_k"] = _make_pace_time(0.95 * 1.609, kilometer_pace_seconds)
+    special["three_k"] = _make_pace_time(0.965 * 1.609, kilometer_pace_seconds)
+    special["five_k"] = _make_pace_time(0.975 * 1.609, kilometer_pace_seconds)
+    special["twenty_k"] = _make_pace_time(1.01 * 1.609, kilometer_pace_seconds)
+    special["forty_five_k"] = _make_pace_time(1.12 * 1.609, kilometer_pace_seconds)
     mile_paces["special"] = special
     
     response["mile_paces"] = mile_paces
 
     return json.dumps(response)
 
-    if __name__ == "__main__":
-        # TODO - configuration variable for debug
-        app.run(debug=True)
+if __name__ == "__main__":
+    # TODO - configuration variable for debug
+    app.run(debug=True)

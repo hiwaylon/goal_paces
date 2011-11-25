@@ -94,22 +94,22 @@ class TestGoalPace(unittest.TestCase):
         response = json.loads(response.data)
         self.assertTrue("special" in response["kilometer_paces"])
         special_ks = response["kilometer_paces"]["special"]
-        self.assertEqual("03:49", special_ks["1k"])
-        self.assertEqual("03:56", special_ks["2k"])
-        self.assertEqual("04:00", special_ks["3k"])
-        self.assertEqual("04:02", special_ks["5k"])
-        self.assertEqual("04:11", special_ks["20k"])
-        self.assertEqual("04:38", special_ks["45k"])
+        self.assertEqual("03:49", special_ks["one_k"])
+        self.assertEqual("03:56", special_ks["two_k"])
+        self.assertEqual("04:00", special_ks["three_k"])
+        self.assertEqual("04:02", special_ks["five_k"])
+        self.assertEqual("04:11", special_ks["twenty_k"])
+        self.assertEqual("04:38", special_ks["forty_five_k"])
 
         # mi
         self.assertTrue("special" in response["mile_paces"])
         special_ks = response["mile_paces"]["special"]
-        self.assertEqual("06:09", special_ks["1k"])
-        self.assertEqual("06:20", special_ks["2k"])
-        self.assertEqual("06:26", special_ks["3k"])
-        self.assertEqual("06:30", special_ks["5k"])
-        self.assertEqual("06:44", special_ks["20k"])
-        self.assertEqual("07:28", special_ks["45k"])
+        self.assertEqual("06:09", special_ks["one_k"])
+        self.assertEqual("06:20", special_ks["two_k"])
+        self.assertEqual("06:26", special_ks["three_k"])
+        self.assertEqual("06:30", special_ks["five_k"])
+        self.assertEqual("06:44", special_ks["twenty_k"])
+        self.assertEqual("07:28", special_ks["forty_five_k"])
 
     def test_error(self):
         """It should 400."""
