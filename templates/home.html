@@ -50,10 +50,23 @@
                         $("#35k_continuous_km").html(data.kilometer_paces.specific.continuous.thirty_five_k)
                         $("#40k_continuous_km").html(data.kilometer_paces.specific.continuous.forty_k)
                     })
+                    $("#results").hide()
                     $("#results").show("fast")
-                    // $("#results").slideDown("slow")
                 })
             });
+        </script>
+        <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-27285455-1']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
         </script>
     </head>
     <body class="main">
