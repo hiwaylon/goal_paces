@@ -79,7 +79,27 @@ def paces():
     special["twenty_k"] = _make_pace_time(1.01, kilometer_pace_seconds)
     special["forty_five_k"] = _make_pace_time(1.12, kilometer_pace_seconds)
     kilometer_paces["special"] = special
-        
+
+    # Compute specific paces.
+    intervals = {}
+    intervals["one_k"] = _make_pace_time(1.12, kilometer_pace_seconds)
+    intervals["four_k"] = _make_pace_time(0.98, kilometer_pace_seconds)
+    intervals["five_k"] = _make_pace_time(0.986, kilometer_pace_seconds)
+    intervals["six_k"] = _make_pace_time(0.989, kilometer_pace_seconds)
+    intervals["seven_k"] = _make_pace_time(1.008, kilometer_pace_seconds)
+    intervals["two_k"] = _make_pace_time(0.953, kilometer_pace_seconds)
+    intervals["thirty_five_k"] = _make_pace_time(1.09, kilometer_pace_seconds)
+    kilometer_paces["specific"] = {"intervals": intervals}
+
+    continuous = {}
+    continuous["twenty_five_k"] = _make_pace_time(
+        0.980, kilometer_pace_seconds)
+    continuous["thirty_k"] = _make_pace_time(1.0, kilometer_pace_seconds)
+    continuous["thirty_five_k"] = _make_pace_time(
+        1.031, kilometer_pace_seconds)
+    continuous["forty_k"] = _make_pace_time(1.087, kilometer_pace_seconds)
+    kilometer_paces["specific"]["continuous"] = continuous
+
     response["kilometer_paces"] = kilometer_paces
 
     # Minutes per mile.
@@ -105,7 +125,28 @@ def paces():
     special["twenty_k"] = _make_pace_time(1.01 * 1.609, kilometer_pace_seconds)
     special["forty_five_k"] = _make_pace_time(1.12 * 1.609, kilometer_pace_seconds)
     mile_paces["special"] = special
-    
+
+    # Compute specific paces.
+    intervals = {}
+    intervals["one_k"] = _make_pace_time(1.117 * 1.609, kilometer_pace_seconds)
+    intervals["four_k"] = _make_pace_time(0.98 * 1.609, kilometer_pace_seconds)
+    intervals["five_k"] = _make_pace_time(0.986 * 1.609, kilometer_pace_seconds)
+    intervals["six_k"] = _make_pace_time(0.989 * 1.609, kilometer_pace_seconds)
+    intervals["seven_k"] = _make_pace_time(1.008 * 1.609, kilometer_pace_seconds)
+    intervals["two_k"] = _make_pace_time(0.953 * 1.609, kilometer_pace_seconds)
+    intervals["thirty_five_k"] = _make_pace_time(1.092896 * 1.609, kilometer_pace_seconds)
+    mile_paces["specific"] = {"intervals": intervals}
+
+    continuous = {}
+    continuous["twenty_five_k"] = _make_pace_time(
+        0.980 * 1.609, kilometer_pace_seconds)
+    continuous["thirty_k"] = _make_pace_time(1.0 * 1.609, kilometer_pace_seconds)
+    continuous["thirty_five_k"] = _make_pace_time(
+        1.031 * 1.609, kilometer_pace_seconds)
+    continuous["forty_k"] = _make_pace_time(1.087 * 1.609, kilometer_pace_seconds)
+    mile_paces["specific"]["continuous"] = continuous
+
+
     response["mile_paces"] = mile_paces
 
     return json.dumps(response)

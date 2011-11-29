@@ -111,6 +111,54 @@ class TestGoalPace(unittest.TestCase):
         self.assertEqual("06:44", special_ks["twenty_k"])
         self.assertEqual("07:28", special_ks["forty_five_k"])
 
+    def test_specific_interval_paces(self):
+        """It should create specific interval paces."""
+        response = self.app.get("/api/v1/paces?time=2:54:59")
+        response = json.loads(response.data)
+        
+        # km
+        self.assertTrue("specific" in response["kilometer_paces"])
+        self.assertTrue(
+            "intervals" in response["kilometer_paces"]["specific"])
+        specific_intervals_ks = \
+            response["kilometer_paces"]["specific"]["intervals"]
+        self.assertEqual("04:38", specific_intervals_ks["one_k"])
+        self.assertEqual("04:03", specific_intervals_ks["four_k"])
+        self.assertEqual("04:05", specific_intervals_ks["five_k"])
+        self.assertEqual("04:06", specific_intervals_ks["six_k"])
+        self.assertEqual("04:10", specific_intervals_ks["seven_k"])
+        self.assertEqual("03:57", specific_intervals_ks["two_k"])
+        self.assertEqual("04:31", specific_intervals_ks["thirty_five_k"])
+
+        continuous_ks = \
+            response["kilometer_paces"]["specific"]["continuous"]
+        self.assertEqual("04:03", continuous_ks["twenty_five_k"])
+        self.assertEqual("04:08", continuous_ks["thirty_k"])
+        self.assertEqual("04:08", continuous_ks["thirty_k"])
+        self.assertEqual("04:16", continuous_ks["thirty_five_k"])
+        self.assertEqual("04:30", continuous_ks["forty_k"])
+
+        # miles
+        self.assertTrue("specific" in response["mile_paces"])
+        self.assertTrue(
+            "intervals" in response["mile_paces"]["specific"])
+        interval_miles = \
+            response["mile_paces"]["specific"]["intervals"]
+        self.assertEqual("07:27", interval_miles["one_k"])
+        self.assertEqual("06:32", interval_miles["four_k"])
+        self.assertEqual("06:34", interval_miles["five_k"])
+        self.assertEqual("06:35", interval_miles["six_k"])
+        self.assertEqual("06:43", interval_miles["seven_k"])
+        self.assertEqual("06:21", interval_miles["two_k"])
+        self.assertEqual("07:17", interval_miles["thirty_five_k"])
+
+        continuous_miles = \
+            response["mile_paces"]["specific"]["continuous"]
+        self.assertEqual("06:32", continuous_miles["twenty_five_k"])
+        self.assertEqual("06:40", continuous_miles["thirty_k"])
+        self.assertEqual("06:52", continuous_miles["thirty_five_k"])
+        self.assertEqual("07:15", continuous_miles["forty_k"])
+
     def test_error(self):
         """It should 400."""
         response = self.app.get("/api/v1/paces?glorb=slert")

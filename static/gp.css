@@ -31,6 +31,10 @@ p {
     margin-bottom: 1em;
 }
 
+p strong {
+    font-weight: bold;
+}
+
 input {
     border: 1px solid black;
     padding: 0.33em;
