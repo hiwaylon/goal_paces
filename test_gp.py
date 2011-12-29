@@ -163,3 +163,17 @@ class TestGoalPace(unittest.TestCase):
         """It should 400."""
         response = self.app.get("/api/v1/paces?glorb=slert")
         self.assertEqual(400, response.status_code)
+
+    def test_compute_half_pace(self):
+        """It should compute the pace for a 13.1 race."""
+        response = self.app.get("/api/v1/race?distance=13.1&time=1:17:59")
+        self.assertEqual(200, response.status_code)
+        response = json.loads(response.data)
+        self.assertEqual("05:57", response["mile_pace"])
+
+    def test_compute_10k_pace(self):
+        """It should compute the pace for a 6.2 race."""
+        response = self.app.get("/api/v1/race?distance=6.2&time=35:59")
+        self.assertEqual(200, response.status_code)
+        response = json.loads(response.data)
+        self.assertEqual("05:48", response["mile_pace"])

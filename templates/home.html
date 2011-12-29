@@ -53,6 +53,13 @@
                     $("#results").hide()
                     $("#results").show("fast")
                 })
+                $("#compute_race_button").click(function() {
+                    $.getJSON("/api/v1/race?distance=" + $("#race_distance").val() + "&time=" + $("#race_time").val(), function(data) {
+                        $("#race_pace").html(data.mile_pace)
+                    })
+                    $("#race_results").hide()
+                    $("#race_results").show("fast")
+                })
             });
         </script>
         <script type="text/javascript">
@@ -73,7 +80,8 @@
         <div id="title" class="g960">
             <h1>Marathon Pace Calculator</h1>
         </div>
-        <div id="input" class="g960">
+        <div class="g960 input">
+            <label>time</label>
             <input type="textbox" value="2:54:59" id="time">
             <input type="button" value="Compute Goal Paces" id="compute_button">
         </div>
@@ -136,6 +144,20 @@
                 <p>35k: <span id="35k_continuous_km"></span></p>
                 <p>40k: <span id="40k_continuous_km"></span></p>
             </div>
+        </div>
+        <div id="race" class="g960">
+            <h1>Race Pace Calculator</h1>
+        </div>
+        <div class="g960 input">
+            <label>Time</label>
+            <input type="textbox" value="1:17:59" id="race_time">
+            <label>Distance (miles)</label>
+            <input type="textbox" value="13.1" id="race_distance">
+            <input type="button" value="Compute Race Pace" id="compute_race_button">
+        </div>
+        <div id="race_results" class="g400" style="display: none;">
+            <h2>Race Pace</h2>
+            <p>pace: <span id="race_pace"></span></p>
         </div>
     </body>
 </html>

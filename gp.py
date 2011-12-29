@@ -145,10 +145,26 @@ def paces():
         1.031 * 1.609, kilometer_pace_seconds)
     continuous["forty_k"] = _make_pace_time(1.087 * 1.609, kilometer_pace_seconds)
     mile_paces["specific"]["continuous"] = continuous
-
-
     response["mile_paces"] = mile_paces
 
+    return json.dumps(response)
+
+@app.route("/api/v1/race")
+def race():
+    if "distance" not in request.args:
+        flask.abort(400)
+    distance = float(request.args["distance"])
+    if "time" not in request.args:
+        flask.abort(400)
+    try:
+        time = datetime.datetime.strptime(request.args["time"], "%H:%M:%S")
+    except ValueError:
+        time = datetime.datetime.strptime(request.args["time"], "%M:%S")
+    time_in_seconds = (time.hour * 3600.0) + (time.minute * 60.0) + time.second 
+    mile_pace = time_in_seconds / distance
+    mile_pace = _get_time_from_seconds(mile_pace)
+    mile_pace = mile_pace.strftime("%M:%S")
+    response = {"mile_pace": mile_pace}
     return json.dumps(response)
 
 if __name__ == "__main__":

@@ -52,11 +52,6 @@ input[type=button]:hover {
 }
 
 /* layout */
-/*
-div#title {
-    margin-bottom: 2em;
-}
-*/
-div#input {
+div.input {
     margin-bottom: 2em;
 }
